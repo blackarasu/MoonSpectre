@@ -9,8 +9,7 @@ a:hover{
     color: #08A500;
 }
 #main{
-    width: 80%;
-    margin-left: 10%;
+    width: 100%;
 }
 #map {
     height: 85%;
@@ -37,3 +36,8 @@ a:hover{
 .leaflet-control-attribution a:hover {
     color: #08A500;
 }
+.icon {
+    max-width: 70%;
+    max-height: 70%;
+    margin: 4px;
+  }
