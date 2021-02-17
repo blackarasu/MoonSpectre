@@ -3,7 +3,7 @@ $(document).ready(function () {
     let control = initializeLoader(map);//show loader on map
 });
 function initializeLoader(map) {
-    L.Control.FileLayerLoad.LABEL = '<img class="icon" src="svg/folder.svg" alt="file icon"/>';
+    L.Control.FileLayerLoad.LABEL = '<img class="icon" src="img/folder.svg" alt="file icon"/>';
     control = L.Control.fileLayerLoad({
         fitBounds: true,
         layerOptions: {
@@ -27,7 +27,7 @@ function initializeMap() {
     */
     const BOUNDERIES = { min: { lat: 57, lon: -180 }, max: { lat: -57, lon: 180 } };
     let bounds = L.latLngBounds([[BOUNDERIES.min.lat, BOUNDERIES.min.lon], [BOUNDERIES.max.lat, BOUNDERIES.max.lon]]); //set bounds for imageOverlay
-    const imageUrl = "res/image--000.png";
+    const imageUrl = "img/image--000.png";
     let map = L.map('map', {
         maxBounds: bounds,
         maxBoundsViscosity: 2 / 3,
@@ -38,7 +38,7 @@ function initializeMap() {
         zoomSnap: 0,
         zoomDelta: 0.25,
         minZoom: 2,
-        maxZoom: 5
+        maxZoom: 6
     });
     L.imageOverlay(imageUrl, bounds).addTo(map);
     map.fitBounds(bounds);
