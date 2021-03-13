@@ -1,33 +1,34 @@
 <html>
 <meta charset="UTF-8">
-    <head>
-        <title>MoonSpecture</title>
-        <script
-			  src="https://code.jquery.com/jquery-3.5.1.js"
-			  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-			  crossorigin="anonymous"></script>
-        </script>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-        crossorigin=""/>
-        <link rel="stylesheet" href="css/index.css" />
-      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-        crossorigin=""></script>
-        <script src="js/togeojson.js"></script>
-        <script src="js/leaflet.filelayer.js"></script>
-        <script src="js/FileSaver.js"></script>
-    </head>
-    <body>
-        <div id="main">
-            <div id="header"><h1>MoonSpecture</h1></div>
-            <div id="content">
-                <div id="map">
-                </div>
-            </div>
-            <div id="footer"><span class="bugs_footer">Report any bugs or feature requests to <a href="mailto:bs5@op.pl">bs5@op.pl</a></span></div>
-        </div>
-    </body>
 
+<head>
+    <title>MoonSpecture</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <link rel="stylesheet" href="css/index.css" />
+    <script src="js/leaflet.js"></script>
+    <script src="js/togeojson.js"></script>
+    <script src="js/leaflet.filelayer.js"></script>
+    <script src="js/FileSaver.js"></script>
+    <script src="js/hashCode.js"></script>
     <script src="js/index.js"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div id="header">
+            <h1>MoonSpecture</h1>
+        </div>
+        <div id="content">
+            <div id="map">
+            </div>
+        </div>
+        <div id="footer"><span class="bugs_footer">Report any bugs or request a feature
+                <a href="https://github.com/blackarasu/MoonSpecture/issues">here</a>
+            </span>
+        </div>
+    </div>
+</body>
+
 </html>
