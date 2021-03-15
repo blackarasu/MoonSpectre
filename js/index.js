@@ -34,48 +34,51 @@ function initializeLoader(map) {
         }
         if (Object.entries(event.layer._layers).length > 0) {
             layers.push(new Object({ layer: event.layer, name: event.filename }));
+            map.fitBounds(event.layer.getBounds());
         }
         else {
-            event.layer.remove();//no markers has been added to layer so layer is useless
+            event.layer.clearLayers();
+            event.layer.removeFrom(map);//no markers has been added to a layer so the layer is useless
+            event.layer.clearAllEventListeners();
         }
     });
     control.loader.on('data:error', function (error) {
         console.error(`${error.error.fileName}:${error.error.lineNumber} - ${error.error.message} - Please send an error message and scrreenshot to the developer via link in the footer.`);
     });
     return control;
+}
 
-    function generateHash(feature) {
+function generateHash(feature) {
+    let prop = feature.properties;
+    let hash = `${prop.terrainType.toString().toLowerCase()} 
+                ${prop.name.toString().toLowerCase()} 
+                ${prop["name origin"].toString().toLowerCase()} 
+                ${prop.height.toString().toLowerCase()} 
+                ${prop.diameter.toString().toLowerCase()}`;
+    return hash.hashCode();
+}
+
+function addToFeatures(feature) {//returns true if feature was added succesfully otherwise function returns false
+    let hash = generateHash(feature);
+    for (let i = 0; i < features.length; i++) {
+        if (features[i].hash == hash) {
+            return [false, hash];
+        }
+    }
+    features.push(new Object({ feature: feature, hash: hash }));
+    return [true, hash];
+}
+
+function onEachFeature(feature, layer) {
+    let [isAdded] = addToFeatures(feature);
+    if (isAdded == true) {
         let prop = feature.properties;
-        let hash = `${prop.terrainType.toString().toLowerCase()} 
-                    ${prop.name.toString().toLowerCase()} 
-                    ${prop["name origin"].toString().toLowerCase()} 
-                    ${prop.height.toString().toLowerCase()} 
-                    ${prop.diameter.toString().toLowerCase()}`;
-        return hash.hashCode();
-    }
-
-    function onEachFeature(feature, layer) {
-        let [isAdded] = addToFeatures(feature);
-        if (isAdded == true) {
-            let prop = feature.properties;
-            if (prop && prop.name && prop.diameter && prop.height && prop["name origin"] && prop.terrainType) {
-                layer.bindPopup(`[${feature.geometry.coordinates.toString()}]</br>
-                                ${prop.terrainType} 
-                                ${prop.name}</br>${prop["name origin"]}.</br>Height: 
-                                ${prop.height}</br>Diameter: ${prop.diameter}`);
-            }
+        if (prop && prop.name && prop.diameter && prop.height && prop["name origin"] && prop.terrainType) {
+            layer.bindPopup(`[${feature.geometry.coordinates.toString()}]</br>
+                            ${prop.terrainType} 
+                            ${prop.name}</br>${prop["name origin"]}.</br>Height: 
+                            ${prop.height}</br>Diameter: ${prop.diameter}`);
         }
-    }
-
-    function addToFeatures(feature) {//returns true if feature was added succesfully otherwise function returns false
-        let hash = generateHash(feature);
-        for (let i = 0; i < features.length; i++) {
-            if (features[i].hash == hash) {
-                return [false, hash];
-            }
-        }
-        features.push(new Object({ feature: feature, hash: hash }));
-        return [true, hash];
     }
 }
 
@@ -100,7 +103,6 @@ function initializeMap() {
 }
 
 function clearMap() {
-    clearLocalStorage();
     layers.forEach(layer => {
         layer.layer.remove();
     });
@@ -110,4 +112,9 @@ function clearMap() {
 
 function clearLocalStorage() {
     localStorage.clear();
+}
+
+function reset() {
+    clearLocalStorage();
+    clearMap();
 }
