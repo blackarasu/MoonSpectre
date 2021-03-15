@@ -46,8 +46,7 @@ function initializeLoader(map) {
 
     function generateHash(feature) {
         let prop = feature.properties;
-        let hash = `${feature.geometry.coordinates.toString()} 
-                    ${prop.terrainType.toString().toLowerCase()} 
+        let hash = `${prop.terrainType.toString().toLowerCase()} 
                     ${prop.name.toString().toLowerCase()} 
                     ${prop["name origin"].toString().toLowerCase()} 
                     ${prop.height.toString().toLowerCase()} 
