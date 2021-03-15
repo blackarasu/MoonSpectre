@@ -16,32 +16,28 @@ const BOUNDERIES = { min: { lat: 57, lon: -180 }, max: { lat: -57, lon: 180 } };
 }(window));
 
 function initializeLoader(map) {
-    var markers = new Array();
     L.Control.FileLayerLoad.LABEL = '<img class="icon" src="img/folder.svg" alt="file icon"/>';
     let control = L.Control.fileLayerLoad({
         fitBounds: true,
         layerOptions: {
             pointToLayer: function (feature, latlng) {
-                var marker = L.marker(latlng);
-                addToMarkers(marker, generateHash(feature));
-                return marker;
+                return L.marker(latlng);;
             },
             onEachFeature: onEachFeature
         }
     }).addTo(map);
     control.loader.on('data:loaded', function (event) {
-        if (markers.length > 0) {
-            for(const key in event.layer._layers){
-                if(event.layer._layers[`${key}`]._popupHandlersAdded == undefined){
-                    event.layer._layers[`${key}`].removeFrom(event.layer);
-                }
-              }
+        for (const key in event.layer._layers) {
+            if (event.layer._layers[`${key}`]._popupHandlersAdded == undefined) {//remove layer which doesnt have a popup
+                event.layer._layers[`${key}`].removeFrom(event.layer);
+            }
+        }
+        if (Object.entries(event.layer._layers).length > 0) {
             layers.push(new Object({ layer: event.layer, name: event.filename }));
         }
         else {
             event.layer.remove();//no markers has been added to layer so layer is useless
         }
-        markers = new Array();//clear for another load file
     });
     control.loader.on('data:error', function (error) {
         console.error(`${error.error.fileName}:${error.error.lineNumber} - ${error.error.message} - Please send an error message and scrreenshot to the developer via link in the footer.`);
@@ -59,12 +55,8 @@ function initializeLoader(map) {
         return hash.hashCode();
     }
 
-    function addToMarkers(marker, hash) {
-        markers.push(new Object({ marker: marker, hash: hash }));
-    }
-
     function onEachFeature(feature, layer) {
-        let [isAdded, hash] = addToFeatures(feature);
+        let [isAdded] = addToFeatures(feature);
         if (isAdded == true) {
             let prop = feature.properties;
             if (prop && prop.name && prop.diameter && prop.height && prop["name origin"] && prop.terrainType) {
@@ -72,12 +64,6 @@ function initializeLoader(map) {
                                 ${prop.terrainType} 
                                 ${prop.name}</br>${prop["name origin"]}.</br>Height: 
                                 ${prop.height}</br>Diameter: ${prop.diameter}`);
-            }
-        }
-        else {
-            let isRemoved = removeMarker(hash);
-            if (isRemoved == false) {
-                alert(`Feature already exists but marker: ${hash} could not be removed! Please send an error message and scrreenshot to the developer via link in the footer.`);
             }
         }
     }
@@ -91,17 +77,6 @@ function initializeLoader(map) {
         }
         features.push(new Object({ feature: feature, hash: hash }));
         return [true, hash];
-    }
-
-    function removeMarker(hash) {
-        for (let i = 0; i < markers.length; i++) {
-            if (markers[i].hash == hash) {
-                markers[i].marker.remove();
-                markers.shift(i);
-                return true;
-            }
-        }
-        return false; //could NOT remove Marker for some reason
     }
 }
 
