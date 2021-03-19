@@ -18,7 +18,7 @@ const BOUNDERIES = { min: { lat: 57, lon: -180 }, max: { lat: -57, lon: 180 } };
 }(window));
 
 function loadFromLocalStorage(map) {
-    hashedFeatures = localStorage.getObj(LOCAL_STORAGE.FEATURES);
+    hashedFeatures = localStorage.getObj(LOCAL_STORAGE.FEATURES) || new Array();
     let features = new Array();
     hashedFeatures.forEach(hashedFeature => {
         features.push(hashedFeature.feature);
