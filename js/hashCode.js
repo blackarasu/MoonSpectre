@@ -8,3 +8,13 @@ String.prototype.hashCode = function() {
     }
     return hash;
   };
+  
+function generateHash(feature) {
+  let prop = feature.properties;
+  let hash = `${prop.terrainType.toString().toLowerCase()} 
+              ${prop.name.toString().toLowerCase()} 
+              ${prop["name origin"].toString().toLowerCase()} 
+              ${prop.height.toString().toLowerCase()} 
+              ${prop.diameter.toString().toLowerCase()}`;
+  return hash.hashCode();
+}
