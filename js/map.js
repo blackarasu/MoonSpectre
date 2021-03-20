@@ -25,3 +25,13 @@ function clearMap() {
     layers = new Array();
     hashedFeatures = new Array();
 }
+
+function addPopup(feature, marker) {
+    let prop = feature.properties;
+    if (prop && prop.name && prop.diameter && prop.height && prop["name origin"] && prop.terrainType) {
+        marker.bindPopup(`[${feature.geometry.coordinates.toString()}]</br>
+                            ${prop.terrainType} 
+                            ${prop.name}</br>${prop["name origin"]}.</br>Height: 
+                            ${prop.height}</br>Diameter: ${prop.diameter}`);
+    }
+}

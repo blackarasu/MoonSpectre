@@ -32,13 +32,7 @@ function loadFromLocalStorage(map) {
         }).addTo(map);
         layers.push(geoJsonLayer);
         function onEachFeature(feature, layer) {//don't delete it or it will use leaflet.fileloader scope
-            let prop = feature.properties;
-            if (prop && prop.name && prop.diameter && prop.height && prop["name origin"] && prop.terrainType) {
-                layer.bindPopup(`[${feature.geometry.coordinates.toString()}]</br>
-                                ${prop.terrainType} 
-                                ${prop.name}</br>${prop["name origin"]}.</br>Height: 
-                                ${prop.height}</br>Diameter: ${prop.diameter}`);
-            }
+            addPopup(feature, layer);
         }
     }
 }
