@@ -1,23 +1,10 @@
-/*
- * Load files *locally* (GeoJSON, KML, GPX) into the map
- * using the HTML5 File API.
- *
- * Requires Mapbox's togeojson.js to be in global scope
- * https://github.com/mapbox/togeojson
- */
-
 (function (factory, window) {
-    // define an AMD module that relies on 'leaflet'
     if (typeof define === 'function' && define.amd && window.toGeoJSON) {
         define(['leaflet'], function (L) {
-            factory(L, window.toGeoJSON);
+            factory(L);
         });
     } else if (typeof module === 'object' && module.exports) {
-        // require('LIBRARY') returns a factory that requires window to
-        // build a LIBRARY instance, we normalize how we use modules
-        // that require this pattern but the window provided is a noop
-        // if it's defined
-        module.exports = function (root, L, toGeoJSON) {
+        module.exports = function (root, L) {
             if (L === undefined) {
                 if (typeof window !== 'undefined') {
                     L = require('leaflet');
@@ -25,14 +12,14 @@
                     L = require('leaflet')(root);
                 }
             }
-            factory(L, toGeoJSON);
+            factory(L);
             return L;
         };
-    } else if (typeof window !== 'undefined' && window.L && window.toGeoJSON) {
-        factory(window.L, window.toGeoJSON);
+    } else if (typeof window !== 'undefined' && window.L) {
+        factory(window.L);
     }
-}(function resetLoaderFactory(L, toGeoJSON) {
-    var ResetLoader = L.Layer.extend({
+}(function buttonLoaderFactory(L) {
+    var ButtonLoader = L.Layer.extend({
         options: {
             layer: L.geoJson,
             layerOptions: {},
@@ -44,9 +31,9 @@
         },
     });
 
-    var ResetLayerLoad = L.Control.extend({
+    var ButtonLayerLoad = L.Control.extend({
         statics: {
-            TITLE: 'Click to reset the map',
+            TITLE: 'Default button text',
             LABEL: '&#8965;'
         },
         options: {
@@ -54,6 +41,7 @@
             fitBounds: false,
             layerOptions: {},
             addToMap: true,
+            func: function () {}
         },
 
         initialize: function (options) {
@@ -62,44 +50,38 @@
         },
 
         onAdd: function (map) {
-            this.loader = L.ResetLayer.resetLoader(map, this.options);
+            this.loader = L.ButtonLayer.buttonLoader(map, this.options);
             // Initialize map control
             return this._initContainer();
         },
 
         _initContainer: function () {
+            var callback = this.options.func;
             var zoomName = 'leaflet-control-filelayer leaflet-control-zoom';
             var barName = 'leaflet-bar';
             var partName = barName + '-part';
             var container = L.DomUtil.create('div', zoomName + ' ' + barName);
             var link = L.DomUtil.create('a', zoomName + '-in ' + partName, container);
-            link.innerHTML = L.Control.ResetLayerLoad.LABEL;
+            link.innerHTML = L.Control.ButtonLayerLoad.LABEL;
             link.href = '#';
-            link.title = L.Control.ResetLayerLoad.TITLE;
-
+            link.title = L.Control.ButtonLayerLoad.TITLE;
             L.DomEvent.disableClickPropagation(container);
             L.DomEvent.on(link, 'click', function (e) {
-                reset();
+                callback();
                 e.preventDefault();
             });
             return container;
         }
     });
 
-    L.ResetLayer = {};
-    L.ResetLayer.ResetLoader = ResetLoader;
-    L.ResetLayer.resetLoader = function (map, options) {
-        return new L.ResetLayer.ResetLoader(map, options);
+    L.ButtonLayer = {};
+    L.ButtonLayer.ButtonLoader = ButtonLoader;
+    L.ButtonLayer.buttonLoader = function (map, options) {
+        return new L.ButtonLayer.ButtonLoader(map, options);
     };
 
-    L.Control.ResetLayerLoad = ResetLayerLoad;
-    L.Control.resetLayerLoad = function (options) {
-        return new L.Control.ResetLayerLoad(options);
+    L.Control.ButtonLayerLoad = ButtonLayerLoad;
+    L.Control.buttonLayerLoad = function (options) {
+        return new L.Control.ButtonLayerLoad(options);
     };
 }, window));
-
-
-function reset() {
-    clearLocalStorage();
-    clearMap();
-}

@@ -13,8 +13,9 @@ const BOUNDERIES = { min: { lat: 57, lon: -180 }, max: { lat: -57, lon: 180 } };
     window.addEventListener('load', function () {
         let map = initializeMap(); //show map
         loadFromLocalStorage(map);//load features from local storage;
-        let control = initializeFileLoader(map);//show loader on map
-        let resetControl = initializeResetLoader(map);
+        let saveControl = initializeSaveLoader(map);//show save loader on map
+        let control = initializeFileLoader(map);//show file loader on map
+        let resetControl = initializeResetLoader(map);//show reset loader on map
     });
 }(window));
 
@@ -38,8 +39,29 @@ function loadFromLocalStorage(map) {
     }
 }
 
+function reset() {
+    clearLocalStorage();
+    clearMap();
+}
+
 function initializeResetLoader(map){
-    L.Control.ResetLayerLoad.LABEL = '<img class="icon" src="img/reset.svg" alt="reset icon"/>';
-    let control = L.Control.resetLayerLoad({position: 'topright'}).addTo(map);
+    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/reset.svg" alt="reset icon"/>';
+    L.Control.ButtonLayerLoad.TITLE = "Click to clean the map";
+    let control = L.Control.buttonLayerLoad({position: 'topright',
+                                            func: function(){reset();}                
+    }).addTo(map);
+    return control;
+}
+
+function initializeSaveLoader(map){
+    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/save.svg" alt="save icon"/>';
+    L.Control.ButtonLayerLoad.TITLE = "Click to save whole map top a geojson file.";
+    let control = L.Control.buttonLayerLoad({position: 'topleft',
+                                            func: function(){
+                                                var file = new File([localStorage.getItem(LOCAL_STORAGE.FEATURES)],
+                                                                    "map.geojson", {type: "application/json;charset=utf-8"});
+                                                saveAs(file);
+                                            }                
+    }).addTo(map);
     return control;
 }
