@@ -13,7 +13,8 @@ const BOUNDERIES = { min: { lat: 57, lon: -180 }, max: { lat: -57, lon: 180 } };
     window.addEventListener('load', function () {
         let map = initializeMap(); //show map
         loadFromLocalStorage(map);//load features from local storage;
-        let control = initializeLoader(map);//show loader on map
+        let control = initializeFileLoader(map);//show loader on map
+        let resetControl = initializeResetLoader(map);
     });
 }(window));
 
@@ -30,14 +31,15 @@ function loadFromLocalStorage(map) {
             },
             onEachFeature: onEachFeature
         }).addTo(map);
-        layers.push(geoJsonLayer);
+        layers.push(new Object({ layer: geoJsonLayer, name: LOCAL_STORAGE.FEATURES}));
         function onEachFeature(feature, layer) {//don't delete it or it will use leaflet.fileloader scope
             addPopup(feature, layer);
         }
     }
 }
 
-function reset() {
-    clearLocalStorage();
-    clearMap();
+function initializeResetLoader(map){
+    L.Control.ResetLayerLoad.LABEL = '<img class="icon" src="img/reset.svg" alt="reset icon"/>';
+    let control = L.Control.resetLayerLoad({position: 'topright'}).addTo(map);
+    return control;
 }

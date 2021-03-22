@@ -223,7 +223,7 @@
 
     var FileLayerLoad = L.Control.extend({
         statics: {
-            TITLE: 'Load local file (GPX, KML, GeoJSON)',
+            TITLE: 'Load local file (GPX, KML, GeoJSON). You can also drop files on this window',
             LABEL: '&#8965;'
         },
         options: {

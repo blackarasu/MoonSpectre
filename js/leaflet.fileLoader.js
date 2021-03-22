@@ -1,4 +1,4 @@
-function initializeLoader(map) {
+function initializeFileLoader(map) {
     L.Control.FileLayerLoad.LABEL = '<img class="icon" src="img/folder.svg" alt="file icon"/>';
     let control = L.Control.fileLayerLoad({
         fitBounds: false, // so you can remove layer without worrying errors from leafletjs
