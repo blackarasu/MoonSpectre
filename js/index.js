@@ -56,7 +56,7 @@ function initializeSaveLoader(map){
     let control = L.Control.buttonLayerLoad(new Object({position: 'topleft',
                                             func: function(){
                                                 let features = extractFeatures(hashedFeatures);
-                                                if(features !== new Array() || features.length > 0){
+                                                if(features !== new Array() && features.length > 0){
                                                     var file = new File([JSON.stringify(features)],
                                                         "map.geojson", {type: "application/json;charset=utf-8"});
                                                     saveAs(file);
