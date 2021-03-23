@@ -1,14 +1,6 @@
-const SPAN = { lat: 114, lon: 360 };
-/*
-    *  +lat => north
-    *  -lat => south
-    *  +lon => east
-    *  -lon => west
-*/
 const LOCAL_STORAGE = new Object({ FEATURES: 'features' });
 var layers = new Array();
 var hashedFeatures = new Array();
-const BOUNDERIES = { min: { lat: 57, lon: -180 }, max: { lat: -57, lon: 180 } };
 (function (window) {
     window.addEventListener('load', function () {
         let map = initializeMap(); //show map
