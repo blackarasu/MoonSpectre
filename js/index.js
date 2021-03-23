@@ -14,17 +14,15 @@ const BOUNDERIES = { min: { lat: 57, lon: -180 }, max: { lat: -57, lon: 180 } };
         let map = initializeMap(); //show map
         loadFromLocalStorage(map);//load features from local storage;
         let saveControl = initializeSaveLoader(map);//show save loader on map
-        let control = initializeFileLoader(map);//show file loader on map
+        let fileControl = initializeFileLoader(map);//show file loader on map
+        let addControl = initializeAddLoader(map);//show add feature on map
         let resetControl = initializeResetLoader(map);//show reset loader on map
     });
 }(window));
 
 function loadFromLocalStorage(map) {
     hashedFeatures = localStorage.getObj(LOCAL_STORAGE.FEATURES) || new Array();
-    let features = new Array();
-    hashedFeatures.forEach(hashedFeature => {
-        features.push(hashedFeature.feature);
-    });
+    let features = extractFeatures(hashedFeatures);
     if (features.length > 0) {
         var geoJsonLayer = L.geoJSON(features, {
             pointToLayer: function (geoJsonPoint, latlng) {
@@ -39,29 +37,54 @@ function loadFromLocalStorage(map) {
     }
 }
 
+function extractFeatures(hashedFeatures) {
+    let features = new Array();
+    hashedFeatures.forEach(hashedFeature => {
+        features.push(hashedFeature.feature);
+    });
+    return features;
+}
+
 function reset() {
     clearLocalStorage();
     clearMap();
 }
 
-function initializeResetLoader(map){
-    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/reset.svg" alt="reset icon"/>';
-    L.Control.ButtonLayerLoad.TITLE = "Click to clean the map";
-    let control = L.Control.buttonLayerLoad({position: 'topright',
-                                            func: function(){reset();}                
-    }).addTo(map);
+function initializeSaveLoader(map){
+    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/save.svg" alt="save icon"/>';
+    L.Control.ButtonLayerLoad.TITLE = "Save markers to a geojson file.";
+    let control = L.Control.buttonLayerLoad(new Object({position: 'topleft',
+                                            func: function(){
+                                                let features = extractFeatures(hashedFeatures);
+                                                if(features !== new Array() || features.length > 0){
+                                                    var file = new File([JSON.stringify(features)],
+                                                        "map.geojson", {type: "application/json;charset=utf-8"});
+                                                    saveAs(file);
+                                                }
+                                                else{
+                                                    alert("There's nothing to write");
+                                                }
+                                            }                
+    })).addTo(map);
     return control;
 }
 
-function initializeSaveLoader(map){
-    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/save.svg" alt="save icon"/>';
-    L.Control.ButtonLayerLoad.TITLE = "Click to save whole map top a geojson file.";
-    let control = L.Control.buttonLayerLoad({position: 'topleft',
+function initializeAddLoader(map){
+    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/add.svg" alt="add icon"/>';
+    L.Control.ButtonLayerLoad.TITLE = "Add a feature to a map menu.";
+    let control = L.Control.buttonLayerLoad(new Object({position: 'topright',
                                             func: function(){
-                                                var file = new File([localStorage.getItem(LOCAL_STORAGE.FEATURES)],
-                                                                    "map.geojson", {type: "application/json;charset=utf-8"});
-                                                saveAs(file);
+                                                alert("I have to be implemented first. Please make me.");
                                             }                
-    }).addTo(map);
+    })).addTo(map);
+    return control;
+}
+
+function initializeResetLoader(map){
+    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/reset.svg" alt="reset icon"/>';
+    L.Control.ButtonLayerLoad.TITLE = "Clean a map";
+    let control = L.Control.buttonLayerLoad(new Object({position: 'topright',
+                                            func: function(){reset();}                
+    })).addTo(map);
     return control;
 }

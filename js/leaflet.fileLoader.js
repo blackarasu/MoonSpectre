@@ -1,6 +1,6 @@
 function initializeFileLoader(map) {
     L.Control.FileLayerLoad.LABEL = '<img class="icon" src="img/folder.svg" alt="file icon"/>';
-    let control = L.Control.fileLayerLoad({
+    let control = L.Control.fileLayerLoad(new Object({
         fitBounds: false, // so you can remove layer without worrying errors from leafletjs
         layerOptions: {
             pointToLayer: function (geoJsonPoint, latlng) {
@@ -8,7 +8,7 @@ function initializeFileLoader(map) {
             },
             onEachFeature: onEachFeature
         }
-    }).addTo(map);
+    })).addTo(map);
     control.loader.on('data:loaded', function (event) {
         for (const key in event.layer._layers) {
             if (event.layer._layers[`${key}`]._popupHandlersAdded == undefined) {//remove layer which doesnt have a popup
