@@ -24,7 +24,7 @@ function initializeFileLoader(map) {
             event.layer.removeFrom(map);//no markers has been added to a layer so the layer is useless
         }
     });
-    control.loader.on('data:error', function (error) {//use bootstrap popup error here
+    control.loader.on('data:error', function (error) {//TODO: use bootstrap popup error here
         console.error(`${error.error.fileName}:${error.error.lineNumber} - ${error.error.message} - Please send an error message and scrreenshot to the developer via link in the footer.`);
     });
     return control;

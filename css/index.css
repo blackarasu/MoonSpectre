@@ -1,43 +1,66 @@
-body{
+body {
     background-color: #111;
     color: white;
 }
-a{
+
+a {
     color: #056200;
 }
-a:hover{
+
+a:hover {
     color: #08A500;
 }
-#main{
+
+#main {
     width: 100%;
 }
+
 #map {
     height: 85%;
     border: 3px solid #056200;
 }
+
 #header {
     height: 5%;
     text-align: center;
 }
-#footer{
+
+#footer {
     height: 5%;
     text-align: right;
 }
+
 .bugs_footer {
     display: inline-block;
     padding-top: 10px;
 }
-.leaflet-container{
+
+.leaflet-container {
     background-color: #151515;
 }
+
 .leaflet-control-attribution a {
     color: #056200;
 }
+
 .leaflet-control-attribution a:hover {
     color: #08A500;
 }
+
 .icon {
     max-width: 70%;
     max-height: 70%;
     margin: 4px;
-  }
+}
+
+.popup-button {
+    pointer-events: all;
+    cursor: pointer;
+    position: relative;
+    top: -17px;
+}
+
+.popup-property-info {
+    position: relative;
+    top: -7.5px;
+}

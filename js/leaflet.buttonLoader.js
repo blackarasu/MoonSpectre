@@ -47,6 +47,7 @@
         initialize: function (options) {
             L.Util.setOptions(this, options);
             this.loader = null;
+            return this;
         },
 
         onAdd: function (map) {
@@ -70,6 +71,35 @@
                 callback();
                 e.preventDefault();
             });
+            return container;
+        },
+
+        _initPopupContainer: function () {
+            var zoomName = 'leaflet-control-filelayer leaflet-control-zoom';
+            var container = document.createElement('div');  
+            container.className = zoomName;
+            return container;
+        },
+
+        _addButton: function(container, func){
+            var callback = func;
+            var link = document.createElement('a');
+            container.appendChild(link);
+            link.className = 'popup-button';
+            link.innerHTML = L.Control.ButtonLayerLoad.LABEL;
+            link.href = '#';
+            link.title = L.Control.ButtonLayerLoad.TITLE;
+            link.addEventListener('click', function(){
+                callback();
+            });
+            return container;
+        },
+
+        _addPropertyInfo(container, propertyInfo){
+            var popup = document.createElement('div');
+            popup.innerHTML = propertyInfo;
+            popup.className = 'popup-property-info';
+            container.appendChild(popup); 
             return container;
         }
     });
