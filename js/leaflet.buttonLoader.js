@@ -41,7 +41,7 @@
             fitBounds: false,
             layerOptions: {},
             addToMap: true,
-            func: function () {}
+            func: function () { }
         },
 
         initialize: function (options) {
@@ -76,30 +76,25 @@
 
         _initPopupContainer: function () {
             var zoomName = 'leaflet-control-filelayer leaflet-control-zoom';
-            var container = document.createElement('div');  
-            container.className = zoomName;
+            var container = L.DomUtil.create('div', zoomName);
             return container;
         },
 
-        _addButton: function(container, func){
+        _addButton: function (container, func) {
             var callback = func;
-            var link = document.createElement('a');
-            container.appendChild(link);
-            link.className = 'popup-button';
+            var link = L.DomUtil.create('a', 'popup-button', container);
             link.innerHTML = L.Control.ButtonLayerLoad.LABEL;
             link.href = '#';
             link.title = L.Control.ButtonLayerLoad.TITLE;
-            link.addEventListener('click', function(){
+            link.addEventListener('click', function () {
                 callback();
             });
             return container;
         },
 
-        _addPropertyInfo(container, propertyInfo){
-            var popup = document.createElement('div');
+        _addPropertyInfo(container, propertyInfo) {
+            var popup = L.DomUtil.create('div', 'popup-property-info', container);
             popup.innerHTML = propertyInfo;
-            popup.className = 'popup-property-info';
-            container.appendChild(popup); 
             return container;
         }
     });
