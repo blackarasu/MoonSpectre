@@ -86,8 +86,10 @@
             link.innerHTML = L.Control.ButtonLayerLoad.LABEL;
             link.href = '#';
             link.title = L.Control.ButtonLayerLoad.TITLE;
-            link.addEventListener('click', function () {
+            L.DomEvent.disableClickPropagation(container);
+            L.DomEvent.on(link,'click', function (e) {
                 callback();
+                e.preventDefault();
             });
             return container;
         },
