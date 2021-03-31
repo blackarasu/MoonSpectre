@@ -16,16 +16,20 @@ function loadFromLocalStorage(map) {
     hashedFeatures = localStorage.getObj(LOCAL_STORAGE.FEATURES) || new Array();
     let features = extractFeatures(hashedFeatures);
     if (features.length > 0) {
-        var geoJsonLayer = L.geoJSON(features, {
-            pointToLayer: function (geoJsonPoint, latlng) {
-                return L.marker(latlng);
-            },
-            onEachFeature: onEachFeature
-        }).addTo(map);
-        layers.push(new Object({ layer: geoJsonLayer, name: LOCAL_STORAGE.FEATURES }));
-        function onEachFeature(feature, layer) {//don't delete it or it will use leaflet.fileloader scope
-            addPopup(feature, layer);
-        }
+        addFeaturesToMap(features, map, LOCAL_STORAGE.FEATURES);
+    }
+}
+
+function addFeaturesToMap(features, map, layerName) {
+    var geoJsonLayer = L.geoJSON(features, {
+        pointToLayer: function (_geoJsonPoint, latlng) {
+            return L.marker(latlng);
+        },
+        onEachFeature: onEachFeature
+    }).addTo(map);
+    layers.push(new Object({ layer: geoJsonLayer, name: layerName }));
+    function onEachFeature(feature, layer) {
+        addPopup(feature, layer);
     }
 }
 
@@ -63,13 +67,10 @@ function initializeSaveLoader(map) {
 }
 
 function initializeAddLoader(map) {
-    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/add.svg" alt="add icon"/>';
+    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" data-toggle="modal" data-target="#addFeatureModal" src="img/add.svg" alt="add icon"/>';
     L.Control.ButtonLayerLoad.TITLE = "Add a feature to a map menu.";
     let control = L.Control.buttonLayerLoad(new Object({
-        position: 'topright',
-        func: function () {
-            alert("I have to be implemented first. Please make me.");
-        }
+        position: 'topright'
     })).addTo(map);
     return control;
 }

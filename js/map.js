@@ -37,10 +37,10 @@ function addPopup(feature, marker) {
         }))
         let container = buttonLayer._initPopupContainer();
         marker.bindPopup(container);
-        L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/edit.svg" alt="edit icon"/>';
+        L.Control.ButtonLayerLoad.LABEL = `<img class="icon" data-toggle="modal" data-target="#editFeatureModal" data-hash=${generateHash(feature)} src="img/edit.svg" alt="edit icon"/>`;
         L.Control.ButtonLayerLoad.TITLE = "Edit a marker " + prop.name;
         container = buttonLayer._addButton(container, function () {
-            alert("Edit a marker has to be implemented first. Please make it.");
+            
         });
         L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/remove.svg" alt="remove icon"/>';
         L.Control.ButtonLayerLoad.TITLE = "Remove a marker " + prop.name;

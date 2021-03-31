@@ -64,3 +64,42 @@ a:hover {
     position: relative;
     top: -7.5px;
 }
+
+.modal {
+    color: #056200;
+}
+
+.modal-content, .modal-header, .modal-footer, .modal-body {
+    background-color: #171717;
+    border-color: #2f4431;
+}
+
+.modal-header>.close {
+    color: #2baf24;
+    text-shadow: 0 1px 0 rgb(36, 70, 23);
+}
+
+.form-control, .form-control:focus{
+    color: #056200;
+    background-color: #202020;
+    border-color: #2f4431;
+}
+
+.form-control:focus{
+    box-shadow: 0 0 0 .2rem rgba(17, 150, 23, 0.247);
+}
+
+.form-control::placeholder {
+    color: #359430;
+    opacity: 1;
+}
+
+.btn-primary {
+    background-color: #033d00;
+    border-color: #033d00;
+}
+
+.btn-primary:hover {
+    background-color: #065202;
+    border-color: #065202;
+}
