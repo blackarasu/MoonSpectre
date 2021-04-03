@@ -45,16 +45,23 @@ function addPopup(feature, marker) {
         L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/remove.svg" alt="remove icon"/>';
         L.Control.ButtonLayerLoad.TITLE = "Remove a marker " + prop.name;
         container = buttonLayer._addButton(container, function () {
-            if (confirm("Are you sure you want to remove " + prop.name + " marker")) {//TODO: change to bootstrap confirmation when added
-                let hash = generateHash(feature);
-                hashedFeatures = hashedFeatures.filter(function (value, index, arr) {
-                    return value.hash != hash;
-                });
-                localStorage.setObj(LOCAL_STORAGE.FEATURES, hashedFeatures);
-                marker.remove();
-            }
+            $('#removeFeatureInformation').html(`Are you sure you want to remove <b>${prop.name}</b> from map?`);
+            $('#removeFeatureButton').click(function () {
+                removeButton();
+            })
+            $('#removeFeatureModal').modal('show');
         });
         container = buttonLayer._addPropertyInfo(container, propertyInfo())
+    }
+
+    function removeButton() {
+        let hash = generateHash(feature);
+        deleteLayerFromLayersContains(feature);
+        removeHashFromHashedFeatures(hash);
+        deleteLayerIfEmpty();
+        localStorage.setObj(LOCAL_STORAGE.FEATURES, hashedFeatures);
+        marker.remove();
+        $('#removeFeatureModal').modal('hide');
     }
 
     function propertyInfo() {
@@ -62,6 +69,30 @@ function addPopup(feature, marker) {
                                 ${prop.terrainType} 
                                 ${prop.name}</br>${prop["name origin"]}.</br>Height: 
                                 ${prop.height}</br>Diameter: ${prop.diameter}`;
+    }
+}
+
+function removeHashFromHashedFeatures(hash) {
+    hashedFeatures = hashedFeatures.filter(function (value, index, arr) {
+        return value.hash != hash;
+    });
+}
+
+function deleteLayerFromLayersContains(feature) {
+    for (let i = 0; i < layers.length; i++) {
+        for (key in layers[i].layer._layers) {
+            if (layers[i].layer._layers[`${key}`].feature === feature) {
+                delete layers[i].layer._layers[`${key}`];
+            }
+        }
+    }
+}
+
+function deleteLayerIfEmpty() {
+    for (let i = 0; i < layers.length; i++) {
+        if (Object.keys(layers[i].layer._layers) == 0) {
+            layers.splice(i, 1);
+        }
     }
 }
 
