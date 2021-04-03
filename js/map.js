@@ -31,7 +31,7 @@ function clearMap() {
 
 function addPopup(feature, marker) {
     let prop = feature.properties;
-    if (prop && prop.name && prop.diameter && prop.height && prop["name origin"] && prop.terrainType) {
+    if (prop && prop.name && feature.geometry.coordinates) {
         let buttonLayer = L.Control.buttonLayerLoad(new Object({
             position: 'topright'
         }))
@@ -53,6 +53,9 @@ function addPopup(feature, marker) {
         });
         container = buttonLayer._addPropertyInfo(container, propertyInfo())
     }
+    else{
+        console.error(`${prop.name+' ' || ''}Marker does not have mandatory fields. Please check your map file or contact with computer wizard. :-)`);
+    }
 
     function removeButton() {
         let hash = generateHash(feature);
@@ -66,9 +69,9 @@ function addPopup(feature, marker) {
 
     function propertyInfo() {
         return `${convertLatLongToEastWestSouthNorth(feature.geometry.coordinates).toString().replace(',', ' ')}</br>
-                                ${prop.terrainType} 
-                                ${prop.name}</br>${prop["name origin"]}.</br>Height: 
-                                ${prop.height}</br>Diameter: ${prop.diameter}`;
+                                ${prop.terrainType || "Mountain"} 
+                                ${prop.name}</br>${prop["name origin"] +'.</br>'|| ''}Height: 
+                                ${prop.height || "-"}</br>Diameter: ${prop.diameter || "-"}`;
     }
 }
 
