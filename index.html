@@ -32,56 +32,151 @@
             </div>
         </div>
         <div id="footer"><span class="bugs_footer">Report any bugs or request a feature
-                <a href="https://github.com/blackarasu/MoonSpecture/issues">here</a>
+                <a target="_blank" href="https://github.com/blackarasu/MoonSpecture/issues">here</a>
             </span>
         </div>
     </div>
     <div class="modal fade" id="addFeatureModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add a marker</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-danger" role="alert" style="display:none">
+                        <!--errors with add-->
+                    </div>
                     <form id="addFeatureForm">
-                        <!--Whole Format here-->
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Latitude and longitude</span>
+                            </div>
+                            <input type="text" placeholder="ie. 25.75N" class="form-control latitude">
+                            <input type="text" placeholder="ie. 30.15E" class="form-control longitude">
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Name and origin</span>
+                            </div>
+                            <input type="text" placeholder="Name" class="form-control name">
+                            <input type="text" placeholder="Name origin" class="form-control name-origin">
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Terrain Type</span>
+                            </div>
+                            <input type="text" class="form-control terrainType" placeholder="Mountain">
+                        </div>
+                        <div class="row no-gutters mb-2">
+                            <div class="col-2">
+                                <span class="input-group-text" id="basic-addon1">Height</span>
+                            </div>
+                            <div class="col">
+                                <input type="number" class="form-control height" placeholder="ie. 100m">
+                            </div>
+                            <div class="col-">
+                                <select class="form-control height-unit">
+                                    <option>Unit</option>
+                                    <option value="m">m</option>
+                                    <option value="km">km</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row no-gutters mb-2">
+                            <div class="col-2">
+                                <span class="input-group-prepend input-group-text" id="basic-addon1">Diameter</span>
+                            </div>
+                            <div class="col">
+                                <input type="number" class="form-control diameter" placeholder="ie. 10km">
+                            </div>
+                            <div class="col-">
+                                <select class="form-control diameter-unit">
+                                    <option>Unit</option>
+                                    <option value="m">m</option>
+                                    <option value="km">km</option>
+                                </select>
+                            </div>
+                        </div>
                     </form>
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary close-button" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="addFeatureButton">Create</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="modal fade" id="editFeatureModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editFeatureModalLabel">Edit a Marker</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-danger" role="alert" style="display:none">
+                        <!--errors with edit-->
+                    </div>
                     <form id="editFeatureForm">
-                        <!--Whole Format here-->
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Latitude and longitude</span>
+                            </div>
+                            <input type="text" placeholder="ie. 25.75N" class="form-control latitude" readonly>
+                            <input type="text" placeholder="ie. 30.15E" class="form-control longitude" readonly>
                         </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Name and origin</span>
+                            </div>
+                            <input type="text" placeholder="Name" class="form-control name">
+                            <input type="text" placeholder="Name origin" class="form-control name-origin">
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Terrain Type</span>
+                            </div>
+                            <input type="text" class="form-control terrainType" placeholder="Mountain">
+                        </div>
+                        <div class="row no-gutters mb-2">
+                            <div class="col-2">
+                                <span class="input-group-text" id="basic-addon1">Height</span>
+                            </div>
+                            <div class="col">
+                                <input type="number" class="form-control height" placeholder="ie. 100m">
+                            </div>
+                            <div class="col-">
+                                <select class="form-control height-unit">
+                                    <option>Unit</option>
+                                    <option value="m">m</option>
+                                    <option value="km">km</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row no-gutters mb-2">
+                            <div class="col-2">
+                                <span class="input-group-prepend input-group-text" id="basic-addon1">Diameter</span>
+                            </div>
+                            <div class="col">
+                                <input type="number" class="form-control diameter" placeholder="ie. 10km">
+                            </div>
+                            <div class="col-">
+                                <select class="form-control diameter-unit">
+                                    <option>Unit</option>
+                                    <option value="m">m</option>
+                                    <option value="km">km</option>
+                                </select>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary close-button" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="editFeatureButton">Save changes</button>
                 </div>
             </div>
@@ -92,15 +187,20 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="removeFeatureModalLabel">Remove a Marker</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="removeFeatureInformation"><!--Info about feature to remove--></div>
+                    <div class="alert alert-danger" role="alert" style="display:none">
+                        <!--errors with remove-->
+                    </div>
+                    <div id="removeFeatureInformation">
+                        <!--Info about feature to remove-->
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary close-button" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" id="removeFeatureButton">Remove</button>
                 </div>
             </div>

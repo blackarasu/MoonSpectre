@@ -89,6 +89,19 @@ a:hover {
     box-shadow: 0 0 0 .2rem rgba(17, 150, 23, 0.247);
 }
 
+.form-control:read-only, .input-group-text{
+    background-color: #0f0f0f;
+    border-color: #1f1f1f;
+}
+
+.form-control:read-only{
+    color: #056200;
+}
+
+.input-group-text{
+    color: #0f6c0a;
+}
+
 .form-control::placeholder {
     color: #359430;
     opacity: 1;
