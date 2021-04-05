@@ -6,15 +6,13 @@ function initializeFileLoader(map) {
             pointToLayer: function (geoJsonPoint, latlng) {
                 return L.marker(latlng);
             },
-            onEachFeature: onEachFeature
+            onEachFeature: function(feature, layer){
+                onEachFeature(feature, layer, map);
+            }
         }
     })).addTo(map);
     control.loader.on('data:loaded', function (event) {
-        for (const key in event.layer._layers) {
-            if (event.layer._layers[`${key}`]._popupHandlersAdded == undefined) {//remove layer which doesnt have a popup
-                event.layer._layers[`${key}`].removeFrom(event.layer);
-            }
-        }
+        cleanMarkersWithoutPopup(event.layer);
         if (Object.entries(event.layer._layers).length > 0) {
             map.fitBounds(event.layer.getBounds());
             layers.push(new Object({ layer: event.layer, name: event.filename }));
@@ -30,6 +28,14 @@ function initializeFileLoader(map) {
     return control;
 }
 
+function cleanMarkersWithoutPopup(layer) {
+    for (const key in layer._layers) {
+        if (layer._layers[`${key}`]._popupHandlersAdded == undefined) { //remove layer which doesnt have a popup
+            layer._layers[`${key}`].removeFrom(layer);
+        }
+    }
+}
+
 function addToFeatures(feature) {//returns true if feature was added succesfully otherwise function returns false
     let hash = generateHash(feature);
     for (let i = 0; i < hashedFeatures.length; i++) {
@@ -41,9 +47,9 @@ function addToFeatures(feature) {//returns true if feature was added succesfully
     return [true, hash];
 }
 
-function onEachFeature(feature, layer) {
+function onEachFeature(feature, layer, map) {
     let [isAdded] = addToFeatures(feature);
     if (isAdded == true) {
-        addPopup(feature, layer);
+        addPopup(feature, layer, map);
     }
 }

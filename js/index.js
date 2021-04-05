@@ -13,8 +13,8 @@ var hashedFeatures = new Array();
 }(window));
 
 function loadFromLocalStorage(map) {
-    hashedFeatures = localStorage.getObj(LOCAL_STORAGE.FEATURES) || new Array();
-    let features = extractFeatures(hashedFeatures);
+    let features = localStorage.getObj(LOCAL_STORAGE.FEATURES) || new Array();
+    features = extractFeatures(features);
     if (features.length > 0) {
         addFeaturesToMap(features, map, LOCAL_STORAGE.FEATURES);
     }
@@ -25,11 +25,18 @@ function addFeaturesToMap(features, map, layerName) {
         pointToLayer: function (_geoJsonPoint, latlng) {
             return L.marker(latlng);
         },
-        onEachFeature: onEachFeature
+        onEachFeature: function (feature, layer) {
+            onEachFeature(feature, layer, map);
+        }
     }).addTo(map);
-    layers.push(new Object({ layer: geoJsonLayer, name: layerName }));
-    function onEachFeature(feature, layer) {
-        addPopup(feature, layer);
+    cleanMarkersWithoutPopup(geoJsonLayer);
+    if (Object.entries(geoJsonLayer._layers).length > 0) {
+        layers.push(new Object({ layer: geoJsonLayer, name: layerName }));
+        map.fitBounds(geoJsonLayer.getBounds());
+        return true;
+    }
+    else {
+        return false;
     }
 }
 
@@ -70,7 +77,35 @@ function initializeAddLoader(map) {
     L.Control.ButtonLayerLoad.LABEL = '<img class="icon" data-toggle="modal" data-target="#addFeatureModal" src="img/add.svg" alt="add icon"/>';
     L.Control.ButtonLayerLoad.TITLE = "Add a feature to a map menu.";
     let control = L.Control.buttonLayerLoad(new Object({
-        position: 'topright'
+        position: 'topright',
+        func: function () {
+            let modal = $(`#addFeatureModal`);
+            let button = $('#addFeatureButton');
+            button.click(function () {
+                restoreState(modal);
+                let newFeature = getModalFields(modal, true);
+                if (isFeatureValid(newFeature)) {
+                    if (addFeaturesToMap(newFeature, map, "User")) {
+                        localStorage.setObj(LOCAL_STORAGE.FEATURES, hashedFeatures);
+                        modal.modal('hide');
+                        button.prop("onclick", null).off("click");
+                    }
+                    else {
+                        let element = modal.find('.alert-danger');
+                        printMessage(element, "Features have to be distinguished in whole scope. Please change name or other field that can be optional.");
+                    }
+                }
+                else {
+                    let element = modal.find('.alert-danger');
+                    printMessage(element, "Something went wrong! Please check if coordinates are correct and Name field is not empty.");
+                }
+            });
+            modal.find('.close-button').click(function (){
+                restoreState(modal);
+                modal.find('.close-button').prop("onclick", null).off("click");
+                button.prop("onclick", null).off("click");
+            })
+        }
     })).addTo(map);
     return control;
 }

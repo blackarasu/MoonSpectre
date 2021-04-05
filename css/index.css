@@ -116,3 +116,7 @@ a:hover {
     background-color: #065202;
     border-color: #065202;
 }
+
+.popover > .popover-header{
+    color: #056200;
+}
