@@ -12,14 +12,6 @@ var hashedFeatures = new Array();
     });
 }(window));
 
-function loadFromLocalStorage(map) {
-    let features = localStorage.getObj(LOCAL_STORAGE.FEATURES) || new Array();
-    features = extractFeatures(features);
-    if (features.length > 0) {
-        addFeaturesToMap(features, map, LOCAL_STORAGE.FEATURES);
-    }
-}
-
 function addFeaturesToMap(features, map, layerName) {
     var geoJsonLayer = L.geoJSON(features, {
         pointToLayer: function (_geoJsonPoint, latlng) {
@@ -48,9 +40,51 @@ function extractFeatures(hashedFeatures) {
     return features;
 }
 
-function reset() {
-    clearLocalStorage();
-    clearMap();
+function initializeAddLoader(map) {
+    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" data-toggle="modal" data-target="#addFeatureModal" src="img/add.svg" alt="add icon"/>';
+    L.Control.ButtonLayerLoad.TITLE = "Add a feature to a map menu.";
+    let control = L.Control.buttonLayerLoad(new Object({
+        position: 'topright',
+        func: function () {
+            let modal = $(`#addFeatureModal`);
+            let button = $('#addFeatureButton');
+            button.click(function () {
+                onClickAddButton(modal, button);
+            });
+            resetStatesOnCloseModal(modal, button);
+        }
+    })).addTo(map);
+    return control;
+
+    function onClickAddButton(modal, button) {
+        restoreState(modal);
+        let newFeature = getModalFields(modal, true);
+        if (isFeatureValid(newFeature)) {
+            if (addFeaturesToMap(newFeature, map, "User")) {
+                localStorage.setObj(LOCAL_STORAGE.FEATURES, hashedFeatures);
+                modal.modal('hide');
+                button.prop("onclick", null).off("click");
+            }
+            else {
+                let element = modal.find('.alert-danger');
+                printMessage(element, "Features have to be distinguished in whole scope. Please change name or other field that can be optional.");
+            }
+        }
+        else {
+            let element = modal.find('.alert-danger');
+            printMessage(element, "Something went wrong! Please check if coordinates are correct and Name field is not empty.");
+        }
+    }
+}
+
+function initializeResetLoader(map) {
+    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/reset.svg" alt="reset icon"/>';
+    L.Control.ButtonLayerLoad.TITLE = "Clean a map";
+    let control = L.Control.buttonLayerLoad(new Object({
+        position: 'topright',
+        func: function () { reset(); }
+    })).addTo(map);
+    return control;
 }
 
 function initializeSaveLoader(map) {
@@ -73,49 +107,15 @@ function initializeSaveLoader(map) {
     return control;
 }
 
-function initializeAddLoader(map) {
-    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" data-toggle="modal" data-target="#addFeatureModal" src="img/add.svg" alt="add icon"/>';
-    L.Control.ButtonLayerLoad.TITLE = "Add a feature to a map menu.";
-    let control = L.Control.buttonLayerLoad(new Object({
-        position: 'topright',
-        func: function () {
-            let modal = $(`#addFeatureModal`);
-            let button = $('#addFeatureButton');
-            button.click(function () {
-                restoreState(modal);
-                let newFeature = getModalFields(modal, true);
-                if (isFeatureValid(newFeature)) {
-                    if (addFeaturesToMap(newFeature, map, "User")) {
-                        localStorage.setObj(LOCAL_STORAGE.FEATURES, hashedFeatures);
-                        modal.modal('hide');
-                        button.prop("onclick", null).off("click");
-                    }
-                    else {
-                        let element = modal.find('.alert-danger');
-                        printMessage(element, "Features have to be distinguished in whole scope. Please change name or other field that can be optional.");
-                    }
-                }
-                else {
-                    let element = modal.find('.alert-danger');
-                    printMessage(element, "Something went wrong! Please check if coordinates are correct and Name field is not empty.");
-                }
-            });
-            modal.find('.close-button').click(function () {
-                restoreState(modal);
-                modal.find('.close-button').prop("onclick", null).off("click");
-                button.prop("onclick", null).off("click");
-            })
-        }
-    })).addTo(map);
-    return control;
+function loadFromLocalStorage(map) {
+    let features = localStorage.getObj(LOCAL_STORAGE.FEATURES) || new Array();
+    features = extractFeatures(features);
+    if (features.length > 0) {
+        addFeaturesToMap(features, map, LOCAL_STORAGE.FEATURES);
+    }
 }
 
-function initializeResetLoader(map) {
-    L.Control.ButtonLayerLoad.LABEL = '<img class="icon" src="img/reset.svg" alt="reset icon"/>';
-    L.Control.ButtonLayerLoad.TITLE = "Clean a map";
-    let control = L.Control.buttonLayerLoad(new Object({
-        position: 'topright',
-        func: function () { reset(); }
-    })).addTo(map);
-    return control;
+function reset() {
+    clearLocalStorage();
+    clearMap();
 }

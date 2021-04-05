@@ -6,6 +6,7 @@ var icon = new L.Icon({
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
 });
+
 function initializeFileLoader(map) {
     L.Control.FileLayerLoad.LABEL = '<img class="icon" src="img/folder.svg" alt="file icon"/>';
     let control = L.Control.fileLayerLoad(new Object({
@@ -31,26 +32,13 @@ function initializeFileLoader(map) {
         }
     });
     control.loader.on('data:error', function (error) {
-        let errorsContainer = $('#main-errors-container');
-        let collapseContainer = errorsContainer.find('.collapse-error');
-        collapseContainer.append(
-            `<div class="card card-body">
-                <p>>If you see this error me probably made an oopsie in code again.</br>
+        criticalError(
+            `<p>>If you see this error me probably made an oopsie in code again.</br>
                 <span>Please send an error message and scrreenshot to the developer via link in the footer and describe what you have done that the error appeared.</br> ${error.error.fileName}:${error.error.lineNumber} - ${error.error.message}</span>
-                </p>
-            </div>`
+            </p>`
         );
-        errorsContainer.addClass('show');
     });
     return control;
-}
-
-function cleanMarkersWithoutPopup(layer) {
-    for (const key in layer._layers) {
-        if (layer._layers[`${key}`]._popupHandlersAdded == undefined) { //remove layer which doesnt have a popup
-            layer._layers[`${key}`].removeFrom(layer);
-        }
-    }
 }
 
 function addToFeatures(feature) {//returns true if feature was added succesfully otherwise function returns false
@@ -62,6 +50,25 @@ function addToFeatures(feature) {//returns true if feature was added succesfully
     }
     hashedFeatures.push(new Object({ feature: feature, hash: hash }));
     return [true, hash];
+}
+
+function cleanMarkersWithoutPopup(layer) {
+    for (const key in layer._layers) {
+        if (layer._layers[`${key}`]._popupHandlersAdded == undefined) { //remove layer which doesnt have a popup
+            layer._layers[`${key}`].removeFrom(layer);
+        }
+    }
+}
+
+function criticalError(message) {
+    let errorsContainer = $('#main-errors-container');
+    let collapseContainer = errorsContainer.find('.collapse-error');
+    collapseContainer.append(
+        `<div class="card card-body">
+                ${message}
+            </div>`
+    );
+    errorsContainer.addClass('show');
 }
 
 function onEachFeature(feature, layer, map) {
