@@ -12,10 +12,10 @@ String.prototype.hashCode = function () {
 function generateHash(feature) {
   let prop = feature.properties;
   let optionals = new Object({
-    terrainType: prop.terrainType || "Mountain",
-    nameOrigin: prop["name origin"] || "",
-    height: prop["height"] || "-",
-    diameter: prop.diameter || "-"
+    terrainType: getProperty(prop.terrainType, "Mountain"),
+    nameOrigin: getProperty(prop["name origin"], ""),
+    height: getProperty(prop["height"], "-"),
+    diameter: getProperty(prop.diameter, "-")
   });
   let hash = `${optionals.terrainType.toString().toLowerCase()} 
               ${prop.name.toString().toLowerCase()} 

@@ -121,6 +121,17 @@ a:hover {
     border-color: #065202;
 }
 
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show>.btn-primary.dropdown-toggle, 
+.btn-primary:not(:disabled):not(.disabled):focus,
+.btn-primary:not(:disabled):not(.disabled):active:focus {
+    color: #fff;
+    background-color: #08A500;
+    border-color: #08A500;
+    box-shadow: 0 0 0 .2rem rgba(17, 150, 23, 0.247);
+}
+
 .popover>.popover-header {
     color: #056200;
 }

@@ -1,10 +1,36 @@
-var icon = new L.Icon({
-    iconUrl: 'img/icon/icon.png',
-    shadowUrl: 'img/icon/shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+var icon = new Object({
+    blackIcon: new L.Icon({
+        iconUrl: 'img/icon/black-icon.png',
+        shadowUrl: 'img/icon/shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    }),
+    blueIcon: new L.Icon({
+        iconUrl: 'img/icon/blue-icon.png',
+        shadowUrl: 'img/icon/shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    }),
+    greenIcon: new L.Icon({
+        iconUrl: 'img/icon/green-icon.png',
+        shadowUrl: 'img/icon/shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    }),
+    violetIcon: new L.Icon({
+        iconUrl: 'img/icon/violet-icon.png',
+        shadowUrl: 'img/icon/shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    })
 });
 
 function initializeFileLoader(map) {
@@ -13,7 +39,7 @@ function initializeFileLoader(map) {
         fitBounds: false, // so you can remove layer without worrying errors from leafletjs
         layerOptions: {
             pointToLayer: function (geoJsonPoint, latlng) {
-                return L.marker(latlng, new Object({ icon: icon }));
+                return L.marker(latlng, new Object({ icon: chooseIcon(geoJsonPoint.properties.terrainType || "") }));
             },
             onEachFeature: function (feature, layer) {
                 onEachFeature(feature, layer, map);
@@ -52,6 +78,16 @@ function addToFeatures(feature) {//returns true if feature was added succesfully
     return [true, hash];
 }
 
+function chooseIcon(terrainType){
+    switch(terrainType.toString().toLowerCase()) {
+        case "mountain": return icon.greenIcon;
+        case "mountain range": return icon.violetIcon;
+        case "mare": return icon.blueIcon;
+        case "sea": return icon.blueIcon;
+        default: return icon.blackIcon;
+    }
+}
+
 function cleanMarkersWithoutPopup(layer) {
     for (const key in layer._layers) {
         if (layer._layers[`${key}`]._popupHandlersAdded == undefined) { //remove layer which doesnt have a popup
@@ -66,7 +102,7 @@ function criticalError(message) {
     collapseContainer.append(
         `<div class="card card-body">
                 ${message}
-            </div>`
+        </div>`
     );
     errorsContainer.addClass('show');
 }

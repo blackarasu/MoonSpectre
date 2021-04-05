@@ -66,7 +66,7 @@ function addPopup(feature, marker, map) {
     }
 
     function onClickEditButton(modal, button) {
-        restoreState(modal);
+        resetErrors(modal);
         let newFeature = getModalFields(modal);
         newFeature.geometry = feature.geometry;
         if (isFeatureValid(newFeature)) {
@@ -75,10 +75,17 @@ function addPopup(feature, marker, map) {
             localStorage.setObj(LOCAL_STORAGE.FEATURES, hashedFeatures);
             modal.modal('hide');
             button.prop("onclick", null).off("click");
+            restoreState(modal);
         }
         else {
             let element = modal.find('.alert-danger');
             printMessage(element, "Something went wrong! Please check if coordinates are correct and Name field is not empty.");
+        }
+
+        function resetErrors(modal) {
+            restoreInput(modal.find('longitude'));
+            restoreInput(modal.find('latitude'));
+            restoreInput(modal.find('name'));
         }
     }
 
@@ -93,7 +100,7 @@ function addPopup(feature, marker, map) {
     }
 
     function propertyInfo() {
-        return `${convertLatLngToEWSN(feature.geometry.coordinates).toString().replace(',', ' ')}</br>
+        return `${convertLatLngToEWSN(feature.geometry.coordinates).reverse().toString().replace(',', ' ')}</br>
                                 ${getProperty(prop.terrainType, "Mountain")} 
                                 ${getProperty(prop.name)}</br>${getProperty(prop["name origin"], " ", "</br>")}Height: 
                                 ${getProperty(prop.height, "-")}</br>Diameter: ${getProperty(prop.diameter, "-")}`;
@@ -102,7 +109,6 @@ function addPopup(feature, marker, map) {
 
 function resetStatesOnCloseModal(modal, button) {
     modal.find('.close-button').click(function () {
-        restoreState(modal);
         button.prop("onclick", null).off("click");
     });
 }
@@ -303,6 +309,11 @@ function removeSymbol(ewsn) {
     return ewsn.replace("&#176;", "");
 }
 
+function restoreInput(input) {
+    input.popover('dispose');
+    input.removeClass('is-invalid');
+}
+
 function restoreState(modal) {
     let alertDanger = modal.find(".alert-danger");
     alertDanger.hide();
@@ -310,10 +321,13 @@ function restoreState(modal) {
     restoreInput(latitude);
     let longitude = modal.find('.longitude');
     restoreInput(longitude);
-
-    function restoreInput(input) {
-        input.popover('dispose');
-        input.removeClass('is-invalid');
+    resetInput(modal.find('.name'));
+    resetInput(modal.find('.name-origin'));
+    resetInput(modal.find('.height'));
+    resetInput(modal.find('.diameter'));
+    //restoreInput(modal.find('.terrainType'));    
+    function resetInput(input) {
+        input.val("");
     }
 }
 
@@ -321,4 +335,3 @@ function setBinaryProperty(property) {
     let first = property.split(" ")[0];
     return first == "" ? "-" : property;
 }
-

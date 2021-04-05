@@ -15,7 +15,7 @@ var hashedFeatures = new Array();
 function addFeaturesToMap(features, map, layerName) {
     var geoJsonLayer = L.geoJSON(features, {
         pointToLayer: function (_geoJsonPoint, latlng) {
-            return L.marker(latlng, new Object({ icon: icon }));
+            return L.marker(latlng, new Object({ icon: chooseIcon(_geoJsonPoint.properties.terrainType || "") }));
         },
         onEachFeature: function (feature, layer) {
             onEachFeature(feature, layer, map);
@@ -57,13 +57,14 @@ function initializeAddLoader(map) {
     return control;
 
     function onClickAddButton(modal, button) {
-        restoreState(modal);
+        restoreInputs(modal);
         let newFeature = getModalFields(modal, true);
         if (isFeatureValid(newFeature)) {
             if (addFeaturesToMap(newFeature, map, "User")) {
                 localStorage.setObj(LOCAL_STORAGE.FEATURES, hashedFeatures);
                 modal.modal('hide');
                 button.prop("onclick", null).off("click");
+                restoreState(modal);
             }
             else {
                 let element = modal.find('.alert-danger');
@@ -73,6 +74,12 @@ function initializeAddLoader(map) {
         else {
             let element = modal.find('.alert-danger');
             printMessage(element, "Something went wrong! Please check if coordinates are correct and Name field is not empty.");
+        }
+
+        function restoreInputs(modal) {
+            restoreInput(modal.find('longitude'));
+            restoreInput(modal.find('latitude'));
+            restoreInput(modal.find('name'));
         }
     }
 }
