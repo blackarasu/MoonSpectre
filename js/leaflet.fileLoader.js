@@ -1,12 +1,20 @@
+var icon = new L.Icon({
+    iconUrl: 'img/icon/icon.png',
+    shadowUrl: 'img/icon/shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
 function initializeFileLoader(map) {
     L.Control.FileLayerLoad.LABEL = '<img class="icon" src="img/folder.svg" alt="file icon"/>';
     let control = L.Control.fileLayerLoad(new Object({
         fitBounds: false, // so you can remove layer without worrying errors from leafletjs
         layerOptions: {
             pointToLayer: function (geoJsonPoint, latlng) {
-                return L.marker(latlng);
+                return L.marker(latlng, new Object({ icon: icon }));
             },
-            onEachFeature: function(feature, layer){
+            onEachFeature: function (feature, layer) {
                 onEachFeature(feature, layer, map);
             }
         }
@@ -22,8 +30,17 @@ function initializeFileLoader(map) {
             event.layer.removeFrom(map);//no markers has been added to a layer so the layer is useless
         }
     });
-    control.loader.on('data:error', function (error) {//TODO: use bootstrap popup error here
-        console.error(`${error.error.fileName}:${error.error.lineNumber} - ${error.error.message} - Please send an error message and scrreenshot to the developer via link in the footer.`);
+    control.loader.on('data:error', function (error) {
+        let errorsContainer = $('#main-errors-container');
+        let collapseContainer = errorsContainer.find('.collapse-error');
+        collapseContainer.append(
+            `<div class="card card-body">
+                <p>>If you see this error me probably made an oopsie in code again.</br>
+                <span>Please send an error message and scrreenshot to the developer via link in the footer and describe what you have done that the error appeared.</br> ${error.error.fileName}:${error.error.lineNumber} - ${error.error.message}</span>
+                </p>
+            </div>`
+        );
+        errorsContainer.addClass('show');
     });
     return control;
 }

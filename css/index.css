@@ -11,6 +11,10 @@ a:hover {
     color: #08A500;
 }
 
+.collapse, .card-body {
+    background-color: #171717;
+}
+
 #main {
     width: 100%;
 }
@@ -74,31 +78,31 @@ a:hover {
     border-color: #2f4431;
 }
 
-.modal-header>.close {
+.modal-header>.close, #main-errors-container>p>.close {
     color: #2baf24;
     text-shadow: 0 1px 0 rgb(36, 70, 23);
 }
 
-.form-control, .form-control:focus{
+.form-control, .form-control:focus {
     color: #056200;
     background-color: #202020;
     border-color: #2f4431;
 }
 
-.form-control:focus{
+.form-control:focus {
     box-shadow: 0 0 0 .2rem rgba(17, 150, 23, 0.247);
 }
 
-.form-control:read-only, .input-group-text{
+.form-control:read-only, .input-group-text {
     background-color: #0f0f0f;
     border-color: #1f1f1f;
 }
 
-.form-control:read-only{
+.form-control:read-only {
     color: #056200;
 }
 
-.input-group-text{
+.input-group-text {
     color: #0f6c0a;
 }
 
@@ -117,6 +121,6 @@ a:hover {
     border-color: #065202;
 }
 
-.popover > .popover-header{
+.popover>.popover-header {
     color: #056200;
 }

@@ -4,9 +4,7 @@
 <head>
     <title>MoonSpecture</title>
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-        crossorigin="" />
+    <link rel="stylesheet" href="css/leaflet.css" />
     <link rel="stylesheet" href="css/index.css" />
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
@@ -24,10 +22,25 @@
 
 <body>
     <div id="main" class="container-fluid">
-        <div id="header">
+        <div id="header" class="shadow container-fluid rounded">
             <h1>MoonSpecture</h1>
         </div>
         <div id="content">
+            <div id="main-errors-container" class="errors collapse">
+                <p>
+                    <a class="btn btn-danger" data-toggle="collapse" href="#collapseError" role="button"
+                        aria-expanded="false" aria-controls="collapseError">
+                        &or;
+                    </a>
+                    <button type="button" class="close close-button" data-toggle="collapse" aria-expanded="false"
+                        data-target="#main-errors-container" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </p>
+                <div class="collapse collapse-error" id="collapseError">
+                    <!--container for critical errors-->
+                </div>
+            </div>
             <div id="map">
             </div>
         </div>
@@ -54,7 +67,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Longitude and latitude</span>
                             </div>
-                            <input type="text" placeholder="ie. 42.00E" class="form-control longitude" title="Longitude">
+                            <input type="text" placeholder="ie. 42.00E" class="form-control longitude"
+                                title="Longitude">
                             <input type="text" placeholder="ie. 3.00N" class="form-control latitude" title="Latitude">
                         </div>
                         <div class="input-group mb-2">
@@ -62,13 +76,15 @@
                                 <span class="input-group-text">Name and origin</span>
                             </div>
                             <input type="text" placeholder="Name" class="form-control name" title="Name of the place">
-                            <input type="text" placeholder="Name origin" title="Origin for name. It is not required." class="form-control name-origin">
+                            <input type="text" placeholder="Name origin" title="Origin for name. It is not required."
+                                class="form-control name-origin">
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">Terrain Type</span>
                             </div>
-                            <input type="text" class="form-control terrainType" placeholder="Mountain" title="If left empty it is set to a Mountain">
+                            <input type="text" class="form-control terrainType" placeholder="Mountain"
+                                title="If left empty it is set to a Mountain">
                         </div>
                         <div class="row no-gutters mb-2">
                             <div class="col-2">
@@ -129,8 +145,10 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Longitude and latitude</span>
                             </div>
-                            <input type="text" placeholder="ie. 42.00E" class="form-control longitude" title="Longitude" readonly>
-                            <input type="text" placeholder="ie. 3.00N" class="form-control latitude" title="Latitude" readonly>
+                            <input type="text" placeholder="ie. 42.00E" class="form-control longitude" title="Longitude"
+                                readonly>
+                            <input type="text" placeholder="ie. 3.00N" class="form-control latitude" title="Latitude"
+                                readonly>
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">

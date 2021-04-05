@@ -23,7 +23,7 @@ function loadFromLocalStorage(map) {
 function addFeaturesToMap(features, map, layerName) {
     var geoJsonLayer = L.geoJSON(features, {
         pointToLayer: function (_geoJsonPoint, latlng) {
-            return L.marker(latlng);
+            return L.marker(latlng, new Object({ icon: icon }));
         },
         onEachFeature: function (feature, layer) {
             onEachFeature(feature, layer, map);
@@ -100,7 +100,7 @@ function initializeAddLoader(map) {
                     printMessage(element, "Something went wrong! Please check if coordinates are correct and Name field is not empty.");
                 }
             });
-            modal.find('.close-button').click(function (){
+            modal.find('.close-button').click(function () {
                 restoreState(modal);
                 modal.find('.close-button').prop("onclick", null).off("click");
                 button.prop("onclick", null).off("click");

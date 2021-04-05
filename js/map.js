@@ -192,7 +192,7 @@ function getModalFields(modal, isAdd) {
     return feature;
 }
 
-function setBinaryProperty(property){
+function setBinaryProperty(property) {
     let first = property.split(" ")[0];
     return first == "" ? "-" : property;
 }
