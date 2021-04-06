@@ -38,8 +38,8 @@ function initializeFileLoader(map) {
     let control = L.Control.fileLayerLoad(new Object({
         fitBounds: false, // so you can remove layer without worrying errors from leafletjs
         layerOptions: {
-            pointToLayer: function (geoJsonPoint, latlng) {
-                return L.marker(latlng, new Object({ icon: chooseIcon(geoJsonPoint.properties.terrainType || "") }));
+            pointToLayer: function (_geoJsonPoint, latlng) {
+                return chooseGeometry(latlng, _geoJsonPoint);
             },
             onEachFeature: function (feature, layer) {
                 onEachFeature(feature, layer, map);
@@ -78,8 +78,38 @@ function addToFeatures(feature) {//returns true if feature was added succesfully
     return [true, hash];
 }
 
-function chooseIcon(terrainType){
-    switch(terrainType.toString().toLowerCase()) {
+function chooseGeometry(latlng, geoJsonPoint) {
+    switch (geoJsonPoint.properties.pointType) {
+        case 'Point':
+            return new L.marker(latlng, new Object({
+                alt: geoJsonPoint.properties.name || '',
+                icon: chooseIcon(geoJsonPoint.properties.terrainType || ""),
+                riseOnHover: true,
+                title: geoJsonPoint.properties.name || '',
+                zIndexOffset: 1000,
+            }));
+        case 'Label':
+            return new L.Marker(latlng, new Object({
+                icon: L.divIcon({
+                    className: 'label',
+                    html: `<div class="center-label text-labels">${geoJsonPoint.properties.name || ''}</div>`
+                }),
+                riseOnHover: true,
+                title: geoJsonPoint.properties.name || '',
+                zIndexOffset: 1000,
+            }));
+        default:
+            return new L.marker(latlng, new Object({
+                alt: geoJsonPoint.properties.name || '',
+                icon: chooseIcon(geoJsonPoint.properties.terrainType || ""),
+                title: geoJsonPoint.properties.name || '',
+                zIndexOffset: 1000,
+            }));
+    }
+}
+
+function chooseIcon(terrainType) {
+    switch (terrainType.toString().toLowerCase()) {
         case "mountain": return icon.greenIcon;
         case "mountain range": return icon.violetIcon;
         case "mare": return icon.blueIcon;

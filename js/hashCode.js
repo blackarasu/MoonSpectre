@@ -14,13 +14,13 @@ function generateHash(feature) {
   let optionals = new Object({
     terrainType: getProperty(prop.terrainType, "Mountain"),
     nameOrigin: getProperty(prop["name origin"], ""),
-    height: getProperty(prop["height"], "-"),
-    diameter: getProperty(prop.diameter, "-")
-  });
-  let hash = `${optionals.terrainType.toString().toLowerCase()} 
+    height: setBinaryProperty(setProperty(parseFloat(prop.height) + " " + getUnit(prop.height.toString().toLowerCase().split(" ")[1]))),
+    diameter: setBinaryProperty(setProperty(parseFloat(prop.diameter) + " " + getUnit(prop.diameter.toString().toLowerCase().split(" ")[1])))
+});
+let hash = `${optionals.terrainType.toString().toLowerCase()} 
               ${prop.name.toString().toLowerCase()} 
               ${optionals.nameOrigin.toString().toLowerCase()} 
               ${optionals.height.toString().toLowerCase()} 
               ${optionals.diameter.toString().toLowerCase()}`;
-  return hash.hashCode();
+return hash.hashCode();
 }

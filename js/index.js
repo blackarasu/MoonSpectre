@@ -15,7 +15,7 @@ var hashedFeatures = new Array();
 function addFeaturesToMap(features, map, layerName) {
     var geoJsonLayer = L.geoJSON(features, {
         pointToLayer: function (_geoJsonPoint, latlng) {
-            return L.marker(latlng, new Object({ icon: chooseIcon(_geoJsonPoint.properties.terrainType || "") }));
+            return chooseGeometry(latlng, _geoJsonPoint);
         },
         onEachFeature: function (feature, layer) {
             onEachFeature(feature, layer, map);
@@ -24,8 +24,7 @@ function addFeaturesToMap(features, map, layerName) {
     cleanMarkersWithoutPopup(geoJsonLayer);
     if (Object.entries(geoJsonLayer._layers).length > 0) {
         layers.push(new Object({ layer: geoJsonLayer, name: layerName }));
-        map.fitBounds(geoJsonLayer.getBounds());
-        return true;
+        return [true, geoJsonLayer];
     }
     else {
         return false;
@@ -60,11 +59,13 @@ function initializeAddLoader(map) {
         restoreInputs(modal);
         let newFeature = getModalFields(modal, true);
         if (isFeatureValid(newFeature)) {
-            if (addFeaturesToMap(newFeature, map, "User")) {
+            [isAdded, geoJsonLayer] = addFeaturesToMap(newFeature, map, "User")
+            if (isAdded) {
                 localStorage.setObj(LOCAL_STORAGE.FEATURES, hashedFeatures);
                 modal.modal('hide');
                 button.prop("onclick", null).off("click");
                 restoreState(modal);
+                map.fitBounds(geoJsonLayer.getBounds());
             }
             else {
                 let element = modal.find('.alert-danger');

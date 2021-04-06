@@ -15,7 +15,7 @@ function initializeMap() {
         zoomSnap: 0,
         zoomDelta: 0.25,
         minZoom: 2.8,
-        maxZoom: 6
+        maxZoom: 7.5
     });
     L.imageOverlay(IMAGE_URL, bounds).addTo(map);
     map.fitBounds(bounds);
@@ -181,6 +181,7 @@ function getModalFields(modal, isAdd) {
             type: "Point"
         })
     });
+    feature.properties.pointType = setProperty(getFieldIn(modal, "point-type"), "Point");
     if (isAdd == true) {
         if (isValidCoordinate(ewsn, modal)) {
             feature.geometry.coordinates = convertEWSNToLatLng(ewsn);
@@ -210,6 +211,7 @@ function setModalFields(modal, feature) {
     let ewsn = convertLatLngToEWSN(feature.geometry.coordinates);
     let height = isNaN(parseFloat(props.height)) ? "0" : props.height;
     let diameter = isNaN(parseFloat(props.diameter)) ? "0" : props.diameter;
+    setFieldIn(modal, "point-type", getProperty(props.pointType, "Point"));
     setFieldIn(modal, "longitude", removeSymbol(ewsn[0]));
     setFieldIn(modal, "latitude", removeSymbol(ewsn[1]));
     setFieldIn(modal, "name", getProperty(props.name));
@@ -283,7 +285,7 @@ function isValidCoordinate(ewsn, modal) {
 
 function invalidationPopoverMessage(element, message) {
     element.addClass("is-invalid")
-        .popover({ content: message, html: true })
+        .popover({ content: message, html: true });
 }
 
 function printMessage(element, message) {
@@ -325,7 +327,7 @@ function restoreState(modal) {
     resetInput(modal.find('.name-origin'));
     resetInput(modal.find('.height'));
     resetInput(modal.find('.diameter'));
-    //restoreInput(modal.find('.terrainType'));    
+    //restoreInput(modal.find('.terrainType'));//delete "//" if you want to restore to default terrainType input every successfull creation/edit
     function resetInput(input) {
         input.val("");
     }
