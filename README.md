@@ -1,6 +1,7 @@
 # MoonSpectre
 A fully usable moon map.
-You can add, edit, remove a marker via site or load multiple markers at once from geojson, gpx or kml file format.
+You can add, edit, remove a marker via site or load multiple points at once from geojson, gpx or kml file format.
+You can choose if a point will be a marker or a text label.
 Also you can save your map to geojson file and back up your map.
 An application remembers your map as long you do not click reset button or clear your cache in browser.
 
