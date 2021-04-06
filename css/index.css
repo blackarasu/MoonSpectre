@@ -135,3 +135,25 @@ a:hover {
 .popover>.popover-header {
     color: #056200;
 }
+
+.text-labels {
+    font-size: 1.1em;
+    font-weight: 400;
+    color: #010101;
+    text-shadow: 0 0 3px #1eda17, 0 0 5px #810e68;
+    /* Use color, background, set margins for offset, etc */
+}
+
+.text-labels:hover {
+    font-size: 1.1em;
+    font-weight: 800;
+    color: #222;
+    text-shadow: 0 0 3px #3efa37, 0 0 5px #a12e88;
+    text-align: center;
+    /* Use color, background, set margins for offset, etc */
+}
+
+.center-label{
+    display: table-cell; vertical-align: middle; text-align: center;
+    transform: translate(-33%, -33%);
+}
